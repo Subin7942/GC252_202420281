@@ -3,13 +3,16 @@ class Ball {
   vel;
   diameter;
   colour;
-  isMouseInside;
+  isGrabbed;
+  grabOffset;
+
   constructor(diameter, speed, colour) {
     this.pos = createVector(width / 2, height / 2);
     this.vel = p5.Vector.random2D().setMag(speed);
     this.diameter = diameter;
     this.colour = colour;
-    this.isMouseInside = false;
+    this.isGrabbed = false;
+    this.grabOffset = createVector(0, 0);
   }
 
   init(x, y, speed) {
@@ -19,15 +22,26 @@ class Ball {
     this.vel.setMag(speed);
   }
 
+  drag(x, y) {
+    this.pos.set(x, y);
+    this.pos.add(this.grabOffset);
+  }
+
   applyGravity() {
+    //   if (!this.isGrabbed) {
+    //     this.vel.y += gravity;
+    //   }
+    if (this.isGrabbed) return;
     this.vel.y += gravity;
   }
 
   update() {
+    if (this.isGrabbed) return;
     this.pos.add(this.vel);
   }
 
   resoveWallCollision() {
+    if (this.isGrabbed) return;
     if (
       this.pos.x < this.diameter / 2 ||
       this.pos.x > width - this.diameter / 2
@@ -50,32 +64,39 @@ class Ball {
     }
   }
 
-  setMouseInside(x, y) {
+  // setMouseInside(x, y) {
+  //   const dx = x - this.pos.x;
+  //   const dy = y - this.pos.y;
+  //   const distance = Math.sqrt(dx * dx + dy * dy);
+  //   this.isMouseInside = distance < this.diameter / 2;
+  // }
+  isMouseInside(x, y) {
     const dx = x - this.pos.x;
     const dy = y - this.pos.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    // distance = dx ** 2 + dy ** 2 요것도 제곱근 구하는 거
-    // (dx ** 2 + dy ** 2)**(1/2)
-    this.isMouseInside = distance < this.diameter / 2;
-
-    // 이거 버그임
-    // const distance = this.pos.dist(createVector(x, y));
-
-    // const distance = createVector(x, y).dist(this.pos);
-
-    // const mousePos = createVector(x, y);
-    // const distance = p5.Vector.dist(mousePos, this.pos);
-    // this.isMouseInside = distance <= this.diameter / 2;
+    const distance = (dx ** 2 + dy ** 2) ** (1 / 2);
+    return distance < this.diameter / 2;
   }
 
-  show() {
-    if (this.isMouseInside) {
-      stroke(this.colour);
+  grab(x, y) {
+    this.grabOffset.set(this.pos);
+    this.grabOffset.sub(x, y);
+    this.vel.set(0, 0);
+    this.isGrabbed = true;
+  }
+
+  ungrab() {
+    this.isGrabbed = false;
+  }
+
+  show(isHovered) {
+    if (isHovered) {
       noFill();
+      stroke(this.colour);
     } else {
       noStroke();
       fill(this.colour);
     }
+
     circle(this.pos.x, this.pos.y, this.diameter);
   }
 
