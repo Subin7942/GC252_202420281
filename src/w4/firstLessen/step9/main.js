@@ -1,9 +1,9 @@
 const palette = ['#80A1BA', '#91C4C3', '#B4DEBD', '#FFF7DD'];
-const ballNum = 5;
+const ballNum = 20;
 const balls = [];
 const diameter = 100;
 const speed = 5;
-// const gravity = 0.1;
+
 let gravity;
 const restitution = 0.9;
 
