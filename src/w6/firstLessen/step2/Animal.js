@@ -129,4 +129,15 @@ class Animal {
     endShape(CLOSE);
     pop();
   }
+
+  showEyes() {
+    push();
+    translate(this.head.pos.x, this.head.pos.y);
+    rotate(this.head.heading);
+    noStroke();
+    fill('black');
+    circle(0, 10, 5);
+    circle(0, -10, 5);
+    pop();
+  }
 }

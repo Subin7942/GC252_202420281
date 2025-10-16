@@ -43,6 +43,7 @@ function draw() {
     animal.showPtOnThicknessCCW();
   }
   if (showFlags[4]) animal.showBodyShape();
+  if (showFlags[5]) animal.showEyes();
 }
 
 function keyPressed() {
