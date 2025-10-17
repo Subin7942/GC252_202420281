@@ -93,7 +93,7 @@ class Pursuer {
 
   showTarget() {
     const closest = this.findClosestEvader(evaders);
-    if (closest) {
+    if (closest && closest !== this) {
       push();
       noFill();
       stroke(this.colour);

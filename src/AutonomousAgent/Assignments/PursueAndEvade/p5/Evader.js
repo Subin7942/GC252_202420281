@@ -128,4 +128,17 @@ class Evader {
     endShape();
     pop();
   }
+
+  findClosestEvader(evaders) {
+    let closest = null;
+    let minDist = Infinity;
+    for (const e of evaders) {
+      const d = this.pos.dist(e.pos);
+      if (d < minDist) {
+        minDist = d;
+        closest = e;
+      }
+    }
+    return closest;
+  }
 }
