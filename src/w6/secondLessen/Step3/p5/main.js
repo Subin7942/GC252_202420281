@@ -3,7 +3,7 @@ let mouse;
 const showFlags = [
   false,
   false,
-  true,
+  false,
   true,
   true,
   true,
@@ -19,9 +19,13 @@ function setup() {
   animal = new Animal(
     width / 2,
     height / 4,
-    30,
-    // [40, 60, 35, 50, 40, 50, 40, 50, 40, 50, 40, 30, 15, 7.5, 3]
-    [68, 80, 85, 75, 60, 50, 30, 5]
+    20,
+    [radians(170), radians(190)],
+    // [40, 60, 30, 60, 30, 60, 30, 60, 30, 15, 7.5, 3]
+    [
+      30, 45, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
+      35, 35, 35, 35, 30, 25, 20, 15,
+    ]
   );
 
   mouse = createVector(width / 2, height / 4);
@@ -43,8 +47,10 @@ function draw() {
     animal.showPtOnThicknessCW();
     animal.showPtOnThicknessCCW();
   }
-  if (showFlags[4]) animal.showBodyShape();
-  if (showFlags[5]) animal.showEyes();
+  if (showFlags[4]) {
+    animal.showBodyShape();
+    animal.showEyes();
+  }
 }
 
 function keyPressed() {
