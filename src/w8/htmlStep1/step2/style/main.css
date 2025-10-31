@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(239, 236, 232);
+}
+
+h1 {
+  background-color: rgb(180, 207, 207);
+}
+
+div {
+  background-color: rgb(198, 219, 212);
+  padding-inline: 24px;
+  max-width: 1200px;
+  margin: auto;
+}

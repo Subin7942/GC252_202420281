@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- width=device-width가 없으면 모바일에서 힘듦, 화면 크기를 디바이스에 맞추는 기능 -->
+    <!-- initial-scale은 화면 크기 비율 -->
+    <!-- 얘네 때문에 바디와 html의 사이즈가 같음 -->
+    <title>html-step1</title>
+  </head>
+  <body>
+    <h1>h1에염</h1>
+    <h2>h2에염</h2>
+    <h3>h3에염</h3>
+    <p>요건 문단이에염^^ 줄 바꿔서 작성했어염</p>
+    <!-- display에서 block과 inline은 오래된 것 flex와 grid는 요즘 것 새 문법-->
+    <a href="http://www.naver.com">네이버로 가염</a>
+    <a href="http://www.google.com">구글로 가염</a>
+    <!-- 이미지도 inline -->
+    <!-- 내 다음에 올 친구는 옆에 올 수 있지만 내 앞의 친구는 block인지 inline인지에 따라 옆에 올 수 있을지의 여부가 달려있음 -->
+    <div>
+      <img
+        style="display: block"
+        src="https://i.namu.wiki/i/vbq4_aQcNWu1cOod3l_EujHNyH3aPc3Xrbxn-YUwNGZtJJzqrtCS2vQO0KVjbJRISwFDVhUAavtkETxZF6fj5DVpHuaG-76Q93JfZPd6ox_96Ss3Qp-WyrGZ1A5De9zwaPdCYgqk7bYFJdkmx6GApw.webp"
+        alt="이브이기여어어어어어엉"
+      />
+    </div>
+    <!-- div는 피그마로 치면 프레임, 디브는 블럭이얌 -->
+    <!-- 디브는 블록인데 이미지는 인라인이라 높이 차이남 -->
+    <!-- 알파벳의 베이스라인과 디센더 때문임, 이런 일 없으려면 이미지를 블럭 처리 -->
+    <!-- svg js의 캔버스 이미지는 블럭으로 처리라면 괜찮음 -->
+  </body>
+</html>
