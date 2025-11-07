@@ -73,6 +73,11 @@ class Evader {
       steering.limit(this.maxForce);
       this.applyForce(steering);
     }
+
+    // const range = 10;
+    // if (closetEvader && this.pos.dist(closestEvader.pos) <= range) {
+    //   evaders.push(new Evader(this.pos.x, this.pos.y));
+    // }
   }
 
   flee(target) {
@@ -117,18 +122,6 @@ class Evader {
   }
 
   show() {
-    // const angle = this.vel.heading();
-    // push();
-    // translate(this.pos.x, this.pos.y);
-    // rotate(angle);
-    // noStroke();
-    // fill(this.colour);
-    // beginShape();
-    // vertex(0, 0);
-    // vertex(this.r * Math.cos(radians(-160)), this.r * Math.sin(radians(-160)));
-    // vertex(this.r * Math.cos(radians(160)), this.r * Math.sin(radians(160)));
-    // endShape();
-    // pop();
     const angle = this.vel.heading();
     let col = this.colour; // 기본 색은 초록
 
