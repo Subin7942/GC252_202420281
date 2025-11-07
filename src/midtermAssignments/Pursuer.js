@@ -5,8 +5,8 @@ class Pursuer {
     this.acc = createVector(0, 0);
     this.r = options?.r || 25;
     this.colour = options?.colour || '#FF0000';
-    this.maxSpeed = options?.random(1, 5);
-    this.maxForce = options?.random(0.05, 3);
+    this.maxSpeed = options?.random(5, 10);
+    this.maxForce = options?.random(5, 10);
   }
 
   findClosestEvader(evaders) {
@@ -82,7 +82,7 @@ class Pursuer {
     const closest = this.findClosestEvader(evaders);
     const detectRange = 300;
     if (closest && this.pos.dist(closest.pos) <= detectRange) {
-      col = 'pink';
+      col = '#ff7315ff';
     }
     push();
     translate(this.pos.x, this.pos.y);
@@ -116,7 +116,7 @@ class Pursuer {
     if (d < this.r * 1.2) {
       const food = evaders.indexOf(closest);
       if (food !== -1) {
-        fill('#ff6cd8ff');
+        fill('#ff7315ff');
         evaders.splice(food, 1);
       }
     }

@@ -7,8 +7,11 @@ class Evader {
     this.colour = options?.colour || '#00FF00';
     // this.maxSpeed = options?.maxSpeed || 3;
     // this.maxForce = options?.maxForce || 0.05;
-    this.maxSpeed = options?.random(1, 4);
-    this.maxForce = options?.random(0.05, 3);
+    this.maxSpeed = random(1, 4);
+    this.maxForce = random(1, 3);
+    this.spawn = false;
+    this.lastLoveTime = 0;
+    this.cooldown = 5000;
   }
 
   findClosestPursuer(pursuers) {
@@ -55,29 +58,51 @@ class Evader {
   }
 
   seek(target) {
-    let closestEvader = null;
-    let minDist = Infinity;
-    for (const e of evaders) {
-      if (e !== this) {
-        const d = this.pos.dist(e.pos);
-        if (d < minDist) {
-          minDist = d;
-          closestEvader = e;
-        }
-      }
-    }
+    const closestEvader = this.findClosestEvader(evaders);
+
     if (closestEvader) {
       const desired = p5.Vector.sub(closestEvader.pos, this.pos);
       desired.setMag(this.maxSpeed);
       const steering = p5.Vector.sub(desired, this.vel);
       steering.limit(this.maxForce);
       this.applyForce(steering);
+
+      // 사랑 이벤트 호출
+      const d = this.pos.dist(closestEvader.pos);
+      this.loveLove(closestEvader, d);
+    }
+  }
+
+  loveLove(closestEvader) {
+    const range = 10;
+    const col = '#00FF00';
+    const now = millis();
+
+    if (!closestEvader) {
+      this.spawn = false;
+      return null;
     }
 
-    // const range = 10;
-    // if (closetEvader && this.pos.dist(closestEvader.pos) <= range) {
-    //   evaders.push(new Evader(this.pos.x, this.pos.y));
-    // }
+    const d = this.pos.dist(closestEvader.pos);
+
+    if (
+      closestEvader &&
+      !this.spawn &&
+      d <= range &&
+      this.colour === col &&
+      closestEvader.colour === col &&
+      now - this.lastLoveTime > this.cooldown
+    ) {
+      this.lastLoveTime = now;
+      this.spawn = true;
+      return new Evader(this.pos.x, this.pos.y, { colour: this.colour }); // 생성은 여기서 객체만 반환
+    }
+
+    if (closestEvader && this.pos.dist(closestEvader.pos) > range) {
+      this.spawn = false;
+    }
+
+    return null;
   }
 
   flee(target) {
