@@ -27,13 +27,13 @@ class Evader {
     return closest;
   }
 
-  separate(evaders) {
-    for (const e of evaders) {
-      if (e !== this) {
-        const d = this.pos.dist(e.pos);
+  separate(pursuers) {
+    for (const p of pursuers) {
+      if (p !== this) {
+        const d = this.pos.dist(p.pos);
         const sum = createVector(0, 0);
         if (d > 0 && d < this.r * 2) {
-          const towardMe = p5.Vector.sub(this.pos, e.pos);
+          const towardMe = p5.Vector.sub(this.pos, p.pos);
           towardMe.div(d);
           sum.add(towardMe);
         }

@@ -7,11 +7,8 @@ class Evader {
     this.colour = options?.colour || '#00FF00';
     // this.maxSpeed = options?.maxSpeed || 3;
     // this.maxForce = options?.maxForce || 0.05;
-    this.maxSpeed = random(1, 4);
+    this.maxSpeed = random(1, 5);
     this.maxForce = random(1, 3);
-    this.spawn = false;
-    this.lastLoveTime = 0;
-    this.cooldown = 5000;
   }
 
   findClosestPursuer(pursuers) {
@@ -26,14 +23,38 @@ class Evader {
     }
     return closest;
   }
-
-  separate(evaders) {
+  findClosestEvader(evaders) {
+    let closest = null;
+    let minDist = Infinity;
     for (const e of evaders) {
       if (e !== this) {
         const d = this.pos.dist(e.pos);
+        if (d < minDist) {
+          minDist = d;
+          closest = e;
+        }
+      }
+    }
+    return closest;
+  }
+  showTarget() {
+    const closest = this.findClosestEvader(evaders);
+    if (closest && closest !== this) {
+      push();
+      noFill();
+      stroke(this.colour);
+      line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+      pop();
+    }
+  }
+
+  separate(targets) {
+    for (const t of targets) {
+      if (t !== this) {
+        const d = this.pos.dist(t.pos);
         const sum = createVector(0, 0);
         if (d > 0 && d < this.r * 2) {
-          const towardMe = p5.Vector.sub(this.pos, e.pos);
+          const towardMe = p5.Vector.sub(this.pos, t.pos);
           towardMe.div(d);
           sum.add(towardMe);
         }
@@ -57,56 +78,25 @@ class Evader {
     this.acc.add(force);
   }
 
-  seek(target) {
-    const closestEvader = this.findClosestEvader(evaders);
+  seek() {
+    const desired = p5.Vector.sub(target, this.pos);
+    desired.setMag(this.maxSpeed);
+    const steering = p5.Vector.sub(desired, this.vel);
+    steering.limit(this.maxForce);
+    this.applyForce(steering);
 
-    if (closestEvader) {
-      const desired = p5.Vector.sub(closestEvader.pos, this.pos);
-      desired.setMag(this.maxSpeed);
-      const steering = p5.Vector.sub(desired, this.vel);
-      steering.limit(this.maxForce);
-      this.applyForce(steering);
-
-      // 사랑 이벤트 호출
-      const d = this.pos.dist(closestEvader.pos);
-      this.loveLove(closestEvader, d);
-    }
-  }
-
-  loveLove(closestEvader) {
-    const range = 10;
-    const col = '#00FF00';
-    const now = millis();
-
-    if (!closestEvader) {
-      this.spawn = false;
-      return null;
-    }
-
-    const d = this.pos.dist(closestEvader.pos);
-
-    if (
-      closestEvader &&
-      !this.spawn &&
-      d <= range &&
-      this.colour === col &&
-      closestEvader.colour === col &&
-      now - this.lastLoveTime > this.cooldown
-    ) {
-      this.lastLoveTime = now;
-      this.spawn = true;
-      return new Evader(this.pos.x, this.pos.y, { colour: this.colour }); // 생성은 여기서 객체만 반환
-    }
-
-    if (closestEvader && this.pos.dist(closestEvader.pos) > range) {
-      this.spawn = false;
-    }
-
-    return null;
+    // const closestEvader = this.findClosestEvader(evaders);
+    // if (closestEvader) {
+    //   const desired = p5.Vector.sub(closestEvader.pos, this.pos);
+    //   desired.setMag(this.maxSpeed);
+    //   const steering = p5.Vector.sub(desired, this.vel);
+    //   steering.limit(this.maxForce);
+    //   this.applyForce(steering);
+    // }
   }
 
   flee(target) {
-    const area = 500;
+    const area = 300;
     const dist = p5.Vector.dist(this.pos, target);
 
     if (dist <= area) {
@@ -123,11 +113,10 @@ class Evader {
         this.maxSpeed = 10;
         this.maxForce = 0.1;
       }
-    } else if (dist > area) {
-      // this.vel.mult(0.95);
-      // this.acc.mult(0);
-      this.seek();
     }
+    // else if (dist > area) {
+    //   this.seek();
+    // }
   }
 
   evade(pursuers, prediction = 30) {
@@ -148,39 +137,16 @@ class Evader {
 
   show() {
     const angle = this.vel.heading();
-    let col = this.colour; // 기본 색은 초록
-
-    // 가까운 추적자 감지
-    const closest = this.findClosestPursuer(pursuers);
-    const detectRange = 300; // 감지 범위
-    if (closest && this.pos.dist(closest.pos) <= detectRange) {
-      col = 'yellow'; // 가까우면 노랑
-    }
-
-    // 도망자 시각화
     push();
     translate(this.pos.x, this.pos.y);
     rotate(angle);
     noStroke();
-    fill(col); // 색 적용
+    fill(this.colour);
     beginShape();
     vertex(0, 0);
     vertex(this.r * Math.cos(radians(-160)), this.r * Math.sin(radians(-160)));
     vertex(this.r * Math.cos(radians(160)), this.r * Math.sin(radians(160)));
     endShape();
     pop();
-  }
-
-  findClosestEvader(evaders) {
-    let closest = null;
-    let minDist = Infinity;
-    for (const e of evaders) {
-      const d = this.pos.dist(e.pos);
-      if (d < minDist) {
-        minDist = d;
-        closest = e;
-      }
-    }
-    return closest;
   }
 }

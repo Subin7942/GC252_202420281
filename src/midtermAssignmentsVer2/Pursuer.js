@@ -5,6 +5,8 @@ class Pursuer {
     this.acc = createVector(0, 0);
     this.r = options?.r || 25;
     this.colour = options?.colour || '#FF0000';
+    // this.maxSpeed = options?.maxSpeed || 3;
+    // this.maxForce = options?.maxForce || 0.05;
     this.maxSpeed = random(1, 5);
     this.maxForce = random(1, 3);
   }
@@ -22,13 +24,24 @@ class Pursuer {
     return closest;
   }
 
-  separate(pursuers) {
-    for (const p of pursuers) {
-      if (p !== this) {
-        const d = this.pos.dist(p.pos);
+  showTarget() {
+    const closest = this.findClosestEvader(evaders);
+    if (closest && closest !== this) {
+      push();
+      noFill();
+      stroke(this.colour);
+      line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+      pop();
+    }
+  }
+
+  separate(targets) {
+    for (const t of targets) {
+      if (t !== this) {
+        const d = this.pos.dist(t.pos);
         const sum = createVector(0, 0);
         if (d > 0 && d < this.r * 2) {
-          const towardMe = p5.Vector.sub(this.pos, p.pos);
+          const towardMe = p5.Vector.sub(this.pos, t.pos);
           towardMe.div(d);
           sum.add(towardMe);
         }
@@ -69,6 +82,19 @@ class Pursuer {
     this.seek(predictedPos);
   }
 
+  eat(evaders) {
+    const closest = this.findClosestEvader(evaders);
+    if (!closest) return;
+
+    const d = this.pos.dist(closest.pos);
+    if (d < this.r * 1.2) {
+      const food = evaders.indexOf(closest);
+      if (food !== -1) {
+        evaders.splice(food, 1);
+      }
+    }
+  }
+
   wrapCoordinates() {
     if (this.pos.x > width) this.pos.x = 0;
     if (this.pos.x < 0) this.pos.x = width;
@@ -78,12 +104,14 @@ class Pursuer {
 
   show() {
     const angle = this.vel.heading();
+
     let col = this.colour;
     const closest = this.findClosestEvader(evaders);
-    const detectRange = 300;
-    if (closest && this.pos.dist(closest.pos) <= detectRange) {
+    const range = 300;
+    if (closest && this.pos.dist(closest.pos) <= range) {
       col = '#ff7315ff';
     }
+
     push();
     translate(this.pos.x, this.pos.y);
     rotate(angle);
@@ -95,30 +123,5 @@ class Pursuer {
     vertex(this.r * Math.cos(radians(160)), this.r * Math.sin(radians(160)));
     endShape();
     pop();
-  }
-
-  showTarget() {
-    const closest = this.findClosestEvader(evaders);
-    if (closest && closest !== this) {
-      push();
-      noFill();
-      stroke(this.colour);
-      line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-      pop();
-    }
-  }
-
-  eatEvader(evaders) {
-    const closest = this.findClosestEvader(evaders);
-    if (!closest) return;
-
-    const d = this.pos.dist(closest.pos);
-    if (d < this.r * 1.2) {
-      const food = evaders.indexOf(closest);
-      if (food !== -1) {
-        fill('#ff7315ff');
-        evaders.splice(food, 1);
-      }
-    }
   }
 }
