@@ -29,6 +29,7 @@ function draw() {
   fill('#ffffff');
   textSize(25);
   text('먹이들: ' + evaders.length, 10, 30);
+  text('마우스 클릭: 먹이 주기', 10, 60);
   pop();
 
   for (const evader of evaders) {
