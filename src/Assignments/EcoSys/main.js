@@ -1,7 +1,3 @@
-const palette = ['#c93f3fff', '#ff6363ff', '#fa2f2fff', '#DD0303'];
-let bl = [];
-let foods = [];
-
 const evaders = [];
 const numEvaders = 10;
 const pursuers = [];
@@ -19,7 +15,9 @@ function setup() {
     evaders.push(new Evader(random(width), random(height)));
   }
   for (let n = 0; n < numPursuers; n++) {
-    pursuers.push(new Pursuer(random(width), random(height)));
+    const x = random(width);
+    const y = random(height);
+    pursuers.push(new Pursuer(x, y));
   }
 }
 
@@ -30,7 +28,7 @@ function draw() {
   push();
   fill('#ffffff');
   textSize(25);
-  text('생존자들: ' + evaders.length, 10, 30);
+  text('먹이들: ' + evaders.length, 10, 30);
   pop();
 
   for (const evader of evaders) {
@@ -48,16 +46,23 @@ function draw() {
     pursuer.pursue(evaders);
     pursuer.separate(pursuers);
     pursuer.wrapCoordinates();
-    pursuer.show();
+
+    // pursuer.show();
+
     // pursuer.showTarget();
     pursuer.eat(evaders);
-  }
+    pursuer.animal.setHeadPos(pursuer.pos);
+    pursuer.animal.update();
 
-  for (const food of foods) {
-    food.show();
+    // pursuer.animal.showSpine();
+
+    // pursuer.animal.showThickness();
+
+    pursuer.animal.showBodyShape();
+    pursuer.animal.showEyes();
   }
 }
 
 function mousePressed() {
-  foods.push(new Food(mouseX, mouseY, 10, '#00ccffff'));
+  evaders.push(new Evader(mouseX, mouseY));
 }

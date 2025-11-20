@@ -1,45 +1,31 @@
-class Evader {
+class Pursuer {
   constructor(x, y, options) {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
     this.r = options?.r || 25;
-    this.colour = options?.colour || '#00FF00';
+    this.colour = options?.colour || '#FF0000';
     // this.maxSpeed = options?.maxSpeed || 3;
     // this.maxForce = options?.maxForce || 0.05;
     this.maxSpeed = random(1, 5);
     this.maxForce = random(1, 3);
 
-    this.loveCooldown = 1000;
-    this.lastLove = 0;
+    this.animal = new Animal(x, y, 30, [radians(170), radians(190)]);
   }
 
-  findClosestPursuer(pursuers) {
-    let closest = null;
-    let minDist = Infinity;
-    for (const p of pursuers) {
-      const d = this.pos.dist(p.pos);
-      if (d < minDist) {
-        minDist = d;
-        closest = p;
-      }
-    }
-    return closest;
-  }
   findClosestEvader(evaders) {
     let closest = null;
     let minDist = Infinity;
     for (const e of evaders) {
-      if (e !== this) {
-        const d = this.pos.dist(e.pos);
-        if (d < minDist) {
-          minDist = d;
-          closest = e;
-        }
+      const d = this.pos.dist(e.pos);
+      if (d < minDist) {
+        minDist = d;
+        closest = e;
       }
     }
     return closest;
   }
+
   showTarget() {
     const closest = this.findClosestEvader(evaders);
     if (closest && closest !== this) {
@@ -48,37 +34,6 @@ class Evader {
       stroke(this.colour);
       line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
       pop();
-    }
-  }
-
-  loveLove() {
-    const now = millis();
-    const maxEvaders = 30;
-    const minEvaders = 5;
-
-    if (evaders.length <= minEvaders) return;
-
-    if (now - this.lastLove < this.loveCooldown) return;
-
-    const closest = this.findClosestEvader(evaders);
-    if (!closest || closest === this) return;
-
-    if (now - closest.lastLove < closest.loveCooldown) return;
-
-    const dist = this.pos.dist(closest.pos);
-    const area = 20;
-    if (closest !== this && dist < area) {
-      const midX = (this.pos.x + closest.pos.x) / 2;
-      const midY = (this.pos.y + closest.pos.y) / 2;
-      if (evaders.length < maxEvaders) {
-        evaders.push(new Evader(midX, midY));
-      }
-
-      this.vel.mult(-1);
-      closest.vel.mult(-1);
-
-      this.lastLove = now;
-      closest.lastLove = now;
     }
   }
 
@@ -112,7 +67,7 @@ class Evader {
     this.acc.add(force);
   }
 
-  seek() {
+  seek(target) {
     const desired = p5.Vector.sub(target, this.pos);
     desired.setMag(this.maxSpeed);
     const steering = p5.Vector.sub(desired, this.vel);
@@ -120,34 +75,28 @@ class Evader {
     this.applyForce(steering);
   }
 
-  flee(target) {
-    const area = 300;
-    const dist = p5.Vector.dist(this.pos, target);
-
-    if (dist <= area) {
-      const direction = p5.Vector.sub(this.pos, target);
-      direction.setMag(this.maxSpeed);
-      const steering = p5.Vector.sub(direction, this.vel);
-      steering.limit(this.maxForce);
-      this.applyForce(steering);
-
-      if (dist <= this.r * 2) {
-        this.maxSpeed = 20;
-        this.maxForce = 0.5;
-      } else {
-        this.maxSpeed = 10;
-        this.maxForce = 0.1;
-      }
-    }
-  }
-
-  evade(pursuers, prediction = 30) {
-    const closest = this.findClosestPursuer(pursuers);
+  pursue(evaders, prediction = 30) {
+    const closest = this.findClosestEvader(evaders);
     if (!closest) return;
     const predictedVel = p5.Vector.mult(closest.vel, prediction);
     // 더 작성해야 작동합니다.
     const predictedPos = p5.Vector.add(closest.pos, predictedVel);
-    this.flee(predictedPos);
+    this.seek(predictedPos);
+  }
+
+  eat(evaders) {
+    const closest = this.findClosestEvader(evaders);
+    if (!closest) return;
+
+    const d = this.pos.dist(closest.pos);
+    if (d < this.r * 1.2) {
+      const food = evaders.indexOf(closest);
+      if (food !== -1) {
+        evaders.splice(food, 1);
+        this.showEatText = true;
+        this.eatTextTimer = millis();
+      }
+    }
   }
 
   wrapCoordinates() {
@@ -161,10 +110,10 @@ class Evader {
     const angle = this.vel.heading();
 
     let col = this.colour;
-    const lover = this.findClosestEvader(evaders);
-    const range = 20;
-    if (lover && this.pos.dist(lover.pos) <= range) {
-      col = '#ff56a8ff';
+    const closest = this.findClosestEvader(evaders);
+    const range = 300;
+    if (closest && this.pos.dist(closest.pos) <= range) {
+      col = '#ffc115ff';
     }
 
     push();

@@ -170,13 +170,23 @@ class Evader {
     push();
     translate(this.pos.x, this.pos.y);
     rotate(angle);
-    noStroke();
     fill(col);
-    beginShape();
-    vertex(0, 0);
-    vertex(this.r * Math.cos(radians(-160)), this.r * Math.sin(radians(-160)));
-    vertex(this.r * Math.cos(radians(160)), this.r * Math.sin(radians(160)));
-    endShape();
+    circle(0, 0, 20);
+    fill('white');
+    circle(0, 5, 5);
+    circle(0, -5, 5);
     pop();
+
+    // push();
+    // translate(this.pos.x, this.pos.y);
+    // rotate(angle);
+    // noStroke();
+    // fill(col);
+    // beginShape();
+    // vertex(0, 0);
+    // vertex(this.r * Math.cos(radians(-160)), this.r * Math.sin(radians(-160)));
+    // vertex(this.r * Math.cos(radians(160)), this.r * Math.sin(radians(160)));
+    // endShape();
+    // pop();
   }
 }

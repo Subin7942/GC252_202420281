@@ -1,11 +1,7 @@
-const palette = ['#c93f3fff', '#ff6363ff', '#fa2f2fff', '#DD0303'];
-let bl = [];
-let foods = [];
-
 const evaders = [];
-const numEvaders = 10;
+const numEvaders = 3;
 const pursuers = [];
-const numPursuers = 5;
+const numPursuers = 2;
 const seed = 0;
 
 let target;
@@ -19,7 +15,9 @@ function setup() {
     evaders.push(new Evader(random(width), random(height)));
   }
   for (let n = 0; n < numPursuers; n++) {
-    pursuers.push(new Pursuer(random(width), random(height)));
+    const x = random(width);
+    const y = random(height);
+    pursuers.push(new Pursuer(x, y));
   }
 }
 
@@ -51,13 +49,13 @@ function draw() {
     pursuer.show();
     // pursuer.showTarget();
     pursuer.eat(evaders);
+    pursuer.points[0].setPos(pursuer.pos);
+    pursuer.points[0].setHeading(pursuer.points[1].heading);
+    pursuer.points.forEach((aPoint, idx) => {
+      if (idx > 0) {
+        aPoint.constrainedBy(pursuer.points[idx - 1], true);
+      }
+      aPoint.show();
+    });
   }
-
-  for (const food of foods) {
-    food.show();
-  }
-}
-
-function mousePressed() {
-  foods.push(new Food(mouseX, mouseY, 10, '#00ccffff'));
 }

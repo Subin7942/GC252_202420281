@@ -109,7 +109,7 @@ class Pursuer {
     const closest = this.findClosestEvader(evaders);
     const range = 300;
     if (closest && this.pos.dist(closest.pos) <= range) {
-      col = '#ff7315ff';
+      col = '#ffc115ff';
     }
 
     push();
