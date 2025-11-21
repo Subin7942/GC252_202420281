@@ -1,7 +1,7 @@
 const evaders = [];
-const numEvaders = 10;
+const numEvaders = 5;
 const pursuers = [];
-const numPursuers = 5;
+const numPursuers = 3;
 const seed = 0;
 
 let target;
@@ -25,12 +25,11 @@ function draw() {
   background(0);
 
   console.log(evaders.length);
-  push();
+
   fill('#ffffff');
   textSize(25);
   text('먹이들: ' + evaders.length, 10, 30);
   text('마우스 클릭: 먹이 주기', 10, 60);
-  pop();
 
   for (const evader of evaders) {
     evader.update();
@@ -61,6 +60,10 @@ function draw() {
 
     pursuer.animal.showBodyShape();
     pursuer.animal.showEyes();
+    if (pursuer.eatTimer > 0) {
+      text('맛있당', pursuer.pos.x, pursuer.pos.y + 50);
+      pursuer.eatTimer--;
+    }
   }
 }
 

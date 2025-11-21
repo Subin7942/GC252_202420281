@@ -11,6 +11,9 @@ class Pursuer {
     this.maxForce = random(1, 3);
 
     this.animal = new Animal(x, y, 30, [radians(170), radians(190)]);
+
+    this.eatTimer = 0;
+    this.eatTimerMax = 5;
   }
 
   findClosestEvader(evaders) {
@@ -93,8 +96,7 @@ class Pursuer {
       const food = evaders.indexOf(closest);
       if (food !== -1) {
         evaders.splice(food, 1);
-        this.showEatText = true;
-        this.eatTextTimer = millis();
+        this.eatTimer = this.eatTimerMax;
       }
     }
   }

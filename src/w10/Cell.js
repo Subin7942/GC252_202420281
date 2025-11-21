@@ -2,61 +2,57 @@ class Cell {
   pos = [0, 0];
   size = [0, 0];
   state = false;
+  neighbors = [null, null, null, null, null, null, null, null];
   nextState = false;
-  neighbors = [null, null];
-  rule = '00010011';
+  static rule(neightbors, currentState) {
+    const livingNeighborsCnt = neightbors.filter((neighbor) => {
+      if (neighbor) return neighbor.state;
+    }).length;
+    if (livingNeighborsCnt < 2) return false; // 고립
+    if (livingNeighborsCnt > 3) return false; // 과잉 인구
+    if (livingNeighborsCnt === 3) return true; // 새로 태어남
+    return currentState && livingNeighborsCnt === 2; // 현재 상태 유지
+  }
 
-  constructor(x, y, w, h, state = false) {
-    this.pos = [x, y];
-    this.size = [w, h];
+  constructor(pos, size, state = false) {
+    this.pos = pos;
+    this.size = size;
     this.state = state;
   }
 
-  setNeighbors(left, right) {
-    this.neighbors[0] = left;
-    this.neighbors[1] = right;
-  }
-
-  getCombinedState() {
-    const binaryString = `${this.neighbors[0]?.state ? 1 : 0}${
-      this.state ? 1 : 0
-    }${this.neighbors[1]?.state ? 1 : 0}`;
-    const decimalNum = parseInt(binaryString, 2);
-    return decimalNum;
-  }
-
-  getNextState() {
-    const combinedState = this.getCombinedState();
-    const nextStateString = this.rule.charAt(7 - combinedState);
-    return nextStateString === '1';
+  setNeighbors(neighbors) {
+    this.neighbors = neighbors;
   }
 
   computeNextState() {
-    this.nextState = this.getNextState();
+    this.nextState = Cell.rule(this.neighbors, this.state);
   }
 
   updateState() {
     this.state = this.nextState;
   }
 
-  isHovered(mX, mY) {
-    return (
-      mX >= this.pos[0] &&
-      mX <= this.pos[0] + this.size[0] &&
-      mY >= this.pos[1] &&
-      mY <= this.pos[1] + this.size[1]
-    );
-  }
-
   toggleState() {
     this.state = !this.state;
   }
 
-  render() {
-    strokeWeight(2);
-    stroke(200);
+  isHovered(mouseX, mouseY) {
+    return (
+      mouseX >= this.pos[0] &&
+      mouseX < this.pos[0] + this.size[0] &&
+      mouseY >= this.pos[1] &&
+      mouseY < this.pos[1] + this.size[1]
+    );
+  }
+
+  render(isHovered = false) {
+    if (isHovered) {
+      stroke('red');
+    } else {
+      stroke('grey');
+    }
     if (this.state) {
-      fill(0);
+      fill('black');
     } else {
       noFill();
     }

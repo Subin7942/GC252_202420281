@@ -166,7 +166,7 @@ class Animal {
     rotate(this.head.heading);
     // noStroke();
     stroke('white');
-    strokeWeight(0.35);
+    strokeWeight(0.5);
     fill('#000');
     circle(0, 0, 5);
     pop();

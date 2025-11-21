@@ -53,7 +53,7 @@ class Evader {
 
   loveLove() {
     const now = millis();
-    const maxEvaders = 30;
+    const maxEvaders = 20;
     const minEvaders = 5;
 
     if (evaders.length <= minEvaders) return;
@@ -172,7 +172,7 @@ class Evader {
     rotate(angle);
     fill(col);
     circle(0, 0, 20);
-    fill('white');
+    fill("'white'");
     circle(0, 5, 5);
     circle(0, -5, 5);
     pop();
