@@ -17,7 +17,7 @@ function getIdx(r, c) {
 }
 
 let lastTime = 0;
-const interval = 100;
+const interval = 10;
 
 function setup() {
   renderer = createCanvas(INITIAL_W, INITIAL_H);
