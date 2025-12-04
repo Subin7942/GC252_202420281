@@ -33,10 +33,6 @@ class Cell {
       (aNeightbor) => aNeightbor && aNeightbor.state === 2
     );
 
-    // const cellA = neighbors0.length ? random(neighbors0) : null;
-    // const cellB = neighbors1.length ? random(neighbors1) : null;
-    // const cellC = neighbors2.length ? random(neighbors2) : null;
-
     const candidates = [...neighbors0, ...neighbors1, ...neighbors2];
 
     if (candidates.length > 0) {
