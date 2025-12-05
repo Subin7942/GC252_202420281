@@ -43,12 +43,28 @@ class Tile {
   }
 
   render(tiles) {
-    image(
-      tiles[this.tileImgIdx],
-      this.pos[0],
-      this.pos[1],
-      this.size[0],
-      this.size[1]
-    );
+    const [x, y] = this.pos;
+    const [w, h] = this.size;
+    const cx = x + w / 2;
+    const cy = y + h / 2;
+
+    // push();
+    // translate(cx, cy);
+    // if (this.state) {
+    //   circle(0, 0, Math.min(w, h));
+    // }
+    // pop();
+    // 도형이 생겨야 하는 부분에만 원이 생김
+    // 도형 실행 부분과 그렇지 않은 부분 구분 용도
+
+    if (this.state) {
+      image(
+        tiles[this.tileImgIdx],
+        this.pos[0],
+        this.pos[1],
+        this.size[0],
+        this.size[1]
+      );
+    }
   }
 }

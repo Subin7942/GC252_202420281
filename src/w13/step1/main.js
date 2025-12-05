@@ -1,7 +1,7 @@
 const sketchContainer = document.querySelector('.sketch-container');
 const tileImgs = [];
 const tiles = [];
-const tilePerRow = 10;
+const tilePerRow = 20;
 let tileSize;
 let tilePerCol;
 
@@ -51,7 +51,7 @@ function setup() {
 }
 
 function draw() {
-  background('#ffa7d7ff');
+  background('#dfdfdfff');
   tiles.forEach((aTile) => {
     aTile.render(tileImgs);
   });
