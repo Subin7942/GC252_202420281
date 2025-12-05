@@ -4,6 +4,7 @@ class Tile {
   neighbors = [null, null, null, null];
   // t, l, b, r;
   state = false;
+  binaryState = '0000';
   tileImgIdx = 0;
 
   constructor(x, y, w, h, state = false) {
@@ -26,6 +27,7 @@ class Tile {
     this.neighbors.forEach((aNeighbor) => {
       binaryString += aNeighbor?.state ? '1' : '0';
     });
+    this.binaryState = binaryString;
     this.tileImgIdx = parseInt(binaryString, 2);
   }
 
@@ -66,5 +68,21 @@ class Tile {
         this.size[1]
       );
     }
+    push();
+    noStroke();
+    translate(cx, cy);
+    if (this.state) {
+      fill('white');
+      circle(0, 0, w / 4);
+    }
+    fill('red');
+    noStroke();
+    textAlign(CENTER, CENTER);
+    textSize(16);
+    text(this.binaryState.charAt(0), 0, -h / 3);
+    text(this.binaryState.charAt(1), -w / 3, 0);
+    text(this.binaryState.charAt(2), 0, h / 3);
+    text(this.binaryState.charAt(3), w / 3, 0);
+    pop();
   }
 }
