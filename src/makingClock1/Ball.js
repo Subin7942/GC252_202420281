@@ -38,6 +38,7 @@ class Ball {
       this.vel.y *= -restitution;
     }
   }
+  ballCollision() {}
 
   show() {
     noStroke();
