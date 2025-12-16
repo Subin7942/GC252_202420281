@@ -1,41 +1,33 @@
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(500, 500);
 }
 
 function draw() {
-  background(220);
-  let s = second();
-  let m = minute();
-  let h = hour();
+  var color1 = color(180, 86, 114);
+  var color2 = color(175, 238, 238);
+  // setGradient(0, 0, width, height, color1, color2);
 
-  sDegree = map(s, 0, 60, 0, 360);
-  mDegree = map(m, 0, 60, 0, 360);
-  hDegree = map(h % 12, 0, 12, 0, 360);
+  c1 = color('#ffffffff');
+  c2 = color('#ff34b1ff');
 
-  push();
-  translate(width / 2 + 100, height / 2);
-  rotate(radians(sDegree));
-  strokeWeight(2);
-  stroke(255, 0, 0);
-  line(0, 0, 150, 0);
-  pop();
+  let colour = lerpColor(c1, c2, 0.2);
+  noStroke();
+  fill('#ffffffff');
+  rect(0, 0, width, height);
+  fill(colour);
+  rect(0, 0, width, (height / 3) * 2);
+  fill('#ff34b1ff');
+  rect(0, 0, width, height / 3);
 
-  nPointedStar(width / 2, height / 2, 5, 200, 100, 0);
+  // background(colour);
 }
 
-function nPointedStar(x, y, n, outerRadius, innerRadius, rotation) {
-  push();
-  let theta = TAU / n;
-  beginShape();
-
-  for (let i = 0; i < n; i++) {
-    vertex(x + cos(i * theta) * outerRadius, y + sin(i * theta) * outerRadius);
-    vertex(
-      x + cos((i + 0.5) * theta) * innerRadius,
-      y + sin((i + 0.5) * theta) * innerRadius
-    );
+function setGradient(x, y, w, h, c1, c2) {
+  noFill();
+  for (var i = y; i <= y + h; i++) {
+    var inter = map(i, y, y + h, 0, 1);
+    var c = lerpColor(c1, c2, inter);
+    stroke(c);
+    line(x, i, x + w, i);
   }
-
-  endShape(CLOSE);
-  pop();
 }
