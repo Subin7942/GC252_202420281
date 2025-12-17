@@ -1,10 +1,17 @@
 const canvas = document.querySelector('.canvas-container');
 let num1, num2, num3, num4, num5, num6, num7, num8, num9, num10, num11, num12;
 let fontR, fontB;
+let princess, princess_saying;
+let pTime = 0;
+let pTimeMax = 0;
+let lace;
 
 let ps = [];
 
 function preload() {
+  princess = loadImage('./assets/princess-8.png');
+  princess_saying = loadImage('./assets/princess_saying-8.png');
+  lace = loadImage('./assets/lace-8.png');
   num1 = loadImage('./romanNumber/1x/1-8.png');
   num2 = loadImage('./romanNumber/1x/2-8.png');
   num3 = loadImage('./romanNumber/1x/3-8.png');
@@ -24,7 +31,6 @@ function preload() {
 function setup() {
   const renderer = createCanvas(windowWidth, windowHeight);
   renderer.parent(canvas);
-
   for (let n = 0; n < 1500; n++) {
     ps.push(
       new Particle(
@@ -44,12 +50,26 @@ function setup() {
 
 function draw() {
   background('#f6bfddff');
+  let s = second();
+  console.log(s);
 
   clock();
   showTime();
-  mouseCursor();
   clockNumber();
-  timer();
+  push();
+  noStroke();
+  fill('#ffffff');
+  rect(width / 2 + 450, height / 2, 600, 700);
+  pop();
+  schedule();
+
+  princessImage();
+  image(lace, 0, 0, width, height);
+  push();
+  translate(width / 2, height / 2);
+  rotate(radians(180));
+  image(lace, -width / 2, -height / 2, width, height);
+  pop();
 
   ps.forEach((aParticle) => {
     aParticle.draw();
@@ -59,107 +79,219 @@ function draw() {
   });
 }
 
-function timer() {
-  let s = 0;
-  let m = 0;
-  let h = 0;
+function princessImage() {
+  let s = second();
+  pTimeMax = 10;
+  if (s % 10 === 0) {
+    pTime = pTimeMax;
+  }
+  if (pTime > 0) {
+    image(princess, width / 2 - 700, height / 2, 500, 500);
+    image(princess_saying, width / 2 - 830, height / 2, 300, 150);
+    pTime--;
+  }
+}
+
+function schedule() {
+  let s = second();
+  let m = minute();
+  let h = hour();
+
   noStroke();
-  fill('#000000ff');
-  rect(width / 8 + 10, height / 2, 400, 800);
   fill('#ffffff');
   textFont(fontB);
-  textSize(32);
-  text('공주가 해야할 일!!', width / 8 - 180, height / 8);
-  textFont(fontR);
-  textSize(24);
-  text('- 잠 많이 자기(미녀는 잠꾸러깅><)', width / 8 - 180, height / 8 + 80);
-  text('- 공부 많이 하기(똑똑이 짱 멋쪄..)', width / 8 - 180, height / 8 + 120);
-  text('- 아리따운 마음씨 가지기(필쑤!!!)', width / 8 - 180, height / 8 + 160);
-
+  textSize(45);
+  fill('#ea7eb9ff');
   text(
-    '타이머: ' + h + ':' + m + ':' + s,
-    width / 8 - 180,
-    height / 8 + 160 + 80
+    '시간이 벌써 ' + (h % 12) + '시 ' + m + '분!!',
+    width / 2 + 180,
+    height / 2 - 250 + 50
   );
-
-  if (mouseIsPressed) {
-    // 초, 분, 시 계산
-    if (frameRate === 60) {
-      s++;
-      if (s === 60) {
-        s = 0;
-      }
-    }
-    if (s === 0) {
-      m++;
-      if (m === 60) {
-        m = 0;
-      }
-    }
-    if (m === 0) {
-      h++;
-    }
+  textSize(32);
+  text('공주님이 지금 해야할 일은?', width / 2 + 180, height / 2 + 20);
+  textSize(45);
+  if (7 === h) {
+    text('일어나서 세안하기', width / 2 + 180, height / 2 + 100 + 20);
+    textSize(20);
+    text(
+      '공주님은 일찍 일어나서 깨끗히 몸단장을 해야해요.',
+      width / 2 + 180,
+      height / 2 + 50 + 100 + 20
+    );
+    text(
+      '피곤한 몸을 이끌고 화장실로 가보아요.',
+      width / 2 + 180,
+      height / 2 + 80 + 100 + 20
+    );
+  } else if (8 === h) {
+    text('"아침 식사하고 산책하기"', width / 2 + 180, height / 2 + 100 + 20);
+    textSize(20);
+    text(
+      '공주님은 아침 식사를 하며 건강한 하루를 시작해요.',
+      width / 2 + 180,
+      height / 2 + 50 + 100 + 20
+    );
+    text(
+      '토스트나 샐러드를 먹고 상쾌한 아침 산책을 떠나요!',
+      width / 2 + 180,
+      height / 2 + 80 + 100 + 20
+    );
+  } else if (9 <= h && h <= 11) {
+    text(
+      '"책 읽으며 마음의 양식 쌓기"',
+      width / 2 + 180,
+      height / 2 + 100 + 20
+    );
+    textSize(20);
+    text(
+      '공주님은 책을 통해 세상의 다양한 이야기를 접한답니다.',
+      width / 2 + 180,
+      height / 2 + 50 + 100 + 20
+    );
+    text(
+      '책을 읽으며 마음 속에 지혜와 용기를 키워가요!',
+      width / 2 + 180,
+      height / 2 + 80 + 100 + 20
+    );
+  } else if (12 === h) {
+    text('"건강한 음식으로 식사하기"', width / 2 + 180, height / 2 + 100 + 20);
+    textSize(20);
+    text(
+      '공주님의 아리따운 외모는 건강한 음식에서 비롯된답니다.',
+      width / 2 + 180,
+      height / 2 + 50 + 100 + 20
+    );
+    text(
+      '허구한날 마라탕과 치킨만 먹지 말고 영양가 있는 식사를 해요!',
+      width / 2 + 180,
+      height / 2 + 80 + 100 + 20
+    );
+  } else if (13 === h) {
+    text('"산책하며 동물들과 인사하기"', width / 2 + 180, height / 2 + 100);
+    textSize(20);
+    text(
+      '공주님은 동물들과도 친하게 지낸답니다.',
+      width / 2 + 180,
+      height / 2 + 50 + 100 + 20
+    );
+    text(
+      '얼른 밖에 나가 숲속 친구들에게 인사해요!',
+      width / 2 + 180,
+      height / 2 + 80 + 100 + 20
+    );
+  } else if (14 <= h && h <= 17) {
+    text('"열씨미 공부하기"', width / 2 + 180, height / 2 + 100 + 20);
+    textSize(20);
+    text(
+      '공주님은 공부를 열심히 해서 매우 지혜로워요.',
+      width / 2 + 180,
+      height / 2 + 50 + 100 + 20
+    );
+    text(
+      '아리따운 외모뿐만 아니라 지성또한 공주의 미덕이죠.',
+      width / 2 + 180,
+      height / 2 + 80 + 100 + 20
+    );
+  } else if (18 === h) {
+    text('"부모님과 저녁식사하기"', width / 2 + 180, height / 2 + 100 + 20);
+    textSize(20);
+    text(
+      '공주님은 부모님과도 사이가 아주 좋아요.',
+      width / 2 + 180,
+      height / 2 + 50 + 100 + 20
+    );
+    text(
+      '사랑하는 부모님과 함께 저녁식사를 하는 것은 매우 즐겁죠',
+      width / 2 + 180,
+      height / 2 + 80 + 100 + 20
+    );
+  } else if (19 <= h && h <= 20) {
+    text('"운동으로 건강 유지하기"', width / 2 + 180, height / 2 + 100 + 20);
+    textSize(20);
+    text(
+      '공주님은 건강한 신체를 유지하기 위해 운동을 해요.',
+      width / 2 + 180,
+      height / 2 + 50 + 100 + 20
+    );
+    text(
+      '아리따운 몸매를 유지하기 위해 스트레칭과 요가를 해봐요!',
+      width / 2 + 180,
+      height / 2 + 80 + 100 + 20
+    );
+  } else if (21 <= h || h <= 6) {
+    text('"잠자기"', width / 2 + 180, height / 2 + 100 + 20);
+    textSize(20);
+    text(
+      '공주님의 좋은 피부는 깊은 잠에서 온답니다.',
+      width / 2 + 180,
+      height / 2 + 50 + 100 + 20
+    );
+    text(
+      '오늘 하루는 어땠나요? 푹 자고 내일도 아리따운 하루를 보내요!',
+      width / 2 + 180,
+      height / 2 + 80 + 100 + 20
+    );
   }
 }
 
 function clockNumber() {
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(30));
   image(num1, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(60));
   image(num2, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(90));
   image(num3, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(120));
   image(num4, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(150));
   image(num5, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(180));
   image(num6, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(210));
   image(num7, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(240));
   image(num8, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(270));
   image(num9, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(300));
   image(num10, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(330));
   image(num11, -20, -300, 40, 80);
   pop();
   push();
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(360));
   image(num12, -20, -300, 40, 80);
   pop();
@@ -188,51 +320,51 @@ function clock() {
   // 위쪽
   push();
   strokeWeight(2);
-  circle(width * 0.5 - 130, height / 5 + 40, 270);
-  circle(width * 0.5 + 130, height / 5 + 40, 270);
+  circle(width * 0.5 - 300 - 130, height / 5 + 40, 270);
+  circle(width * 0.5 - 300 + 130, height / 5 + 40, 270);
   pop();
   strokeWeight(3);
-  circle(width * 0.5, height / 5 + 110, 500);
-  circle(width * 0.5, height / 5 + 100, 500);
-  circle(width * 0.5, height / 5 + 10, 270);
+  circle(width * 0.5 - 300, height / 5 + 110, 500);
+  circle(width * 0.5 - 300, height / 5 + 100, 500);
+  circle(width * 0.5 - 300, height / 5 + 10, 270);
   // 아래쪽
   strokeWeight(3);
   push();
   strokeWeight(2);
-  circle(width * 0.5 - 130, height / 2 + 250, 270);
-  circle(width * 0.5 + 130, height / 2 + 250, 270);
+  circle(width * 0.5 - 300 - 130, height / 2 + 250, 270);
+  circle(width * 0.5 - 300 + 130, height / 2 + 250, 270);
   pop();
-  circle(width * 0.5, height / 2 + 180, 500);
-  circle(width * 0.5, height / 2 + 170, 500);
-  circle(width * 0.5, height / 2 + 270, 270);
-  ellipse(width * 0.5, height / 2, 90, 900);
+  circle(width * 0.5 - 300, height / 2 + 180, 500);
+  circle(width * 0.5 - 300, height / 2 + 170, 500);
+  circle(width * 0.5 - 300, height / 2 + 270, 270);
+  ellipse(width * 0.5 - 300, height / 2, 90, 900);
   push();
   strokeWeight(2);
 
   pop();
   push();
-  translate(width * 0.5, height * 0.5);
+  translate(width * 0.5 - 300, height * 0.5);
   rotate(radians(10));
   ellipse(0, 0, 50, 800);
   rotate(radians(-20));
   ellipse(0, 0, 50, 800);
   pop();
   // 왼
-  circle(width * 0.5 - 110, height / 2, 600);
+  circle(width * 0.5 - 300 - 110, height / 2, 600);
   // 오
-  circle(width * 0.5 + 110, height / 2, 600);
+  circle(width * 0.5 - 300 + 110, height / 2, 600);
 
   // 시계 테두리
   fill('#ea7eb9ff');
   noStroke();
-  circle(width * 0.5, height / 2, 750);
+  circle(width * 0.5 - 300, height / 2, 750);
   push();
   stroke('#f6bfddff');
   strokeWeight(3);
-  circle(width * 0.5, height / 2, 630);
+  circle(width * 0.5 - 300, height / 2, 630);
   noFill();
   strokeWeight(1);
-  circle(width * 0.5, height / 2, 730);
+  circle(width * 0.5 - 300, height / 2, 730);
   pop();
 
   // 시계 배경
@@ -249,7 +381,7 @@ function clock() {
   }
   strokeWeight(3);
   stroke('#d263a8ff');
-  circle(width * 0.5, height / 2, 600);
+  circle(width * 0.5 - 300, height / 2, 600);
 }
 
 function showTime() {
@@ -264,15 +396,15 @@ function showTime() {
   // 초침
   push();
   strokeWeight(2);
-  translate(width / 2, height / 2);
-  rotate(radians(sDegree));
+  translate(width / 2 - 300, height / 2);
+  rotate(radians(sDegree - 90));
   stroke('#ffffff');
   line(0, 0, 250, 0);
   pop();
   // 분침
   push();
   strokeWeight(2);
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(mDegree - 90));
   stroke('#ffffff');
   line(0, 0, 150, 0);
@@ -280,7 +412,7 @@ function showTime() {
   // 시침
   push();
   strokeWeight(2);
-  translate(width / 2, height / 2);
+  translate(width / 2 - 300, height / 2);
   rotate(radians(hDegree - 90));
   stroke('#ffffff');
   line(0, 0, 60, 0);
