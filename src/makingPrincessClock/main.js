@@ -144,7 +144,7 @@ function schedule() {
     text('토스트나 샐러드를 먹고', textW2, textSH2);
     text('상쾌한 아침 산책을 떠나요!', textW2, textSH2 + 30);
   } else if (9 === h) {
-    text('"책 읽으며 마음의 양식 쌓기"', textW, textBH);
+    text('"책 읽으며 마음의 양식 쌓기"', textW - 40, textBH);
     textSize(20);
     text(
       '공주님은 책을 통해 세상의 다양한 이야기를 접한답니다.',
@@ -163,33 +163,58 @@ function schedule() {
     text('공주님은 노래로 세상과 소통해요.', textW2, textSH1);
     text('노래를 부르며 다양한 감정을 노래해봐요.', textW2, textSH2);
   } else if (12 === h) {
-    text('"건강한 음식으로 식사하기"', textW, textBH);
+    text('"건강한 음식으로 식사하기"', textW - 30, textBH);
     textSize(20);
     text('공주님의 아리따운 외모는 좋은 음식에서 온답니다.', textW2, textSH1);
     text('허구한날 마라탕과 치킨만 먹지 말고', textW2, textSH2);
     text('영양가 있는 식사를 해요!', textW2, textSH2 + 30);
   } else if (13 === h) {
-    text('"산책하며 동물들과 인사하기"', textW, textBH);
+    text('"산책하며 동물들과 인사하기"', textW - 50, textBH);
     textSize(20);
     text('공주님은 동물들과도 친하게 지낸답니다.', textW2, textSH1);
     text('얼른 밖에 나가 숲속 친구들에게 인사해요!', textW2, textSH2);
-  } else if (14 <= h && h <= 17) {
+  } else if (14 === h) {
     text('"열씨미 공부하기"', textW, textBH);
     textSize(20);
     text('공주님은 공부를 열심히 해서 매우 지혜로워요.', textW2, textSH1);
     text('아리따운 외모뿐만 아니라 지성또한 공주의 미덕이죠.', textW2, textSH2);
+  } else if (15 === h) {
+    text('"귀부인들과 티타임 가지기"', textW - 30, textBH);
+    textSize(20);
+    text(
+      '공주님은 귀족들과 담소를 나누며 세상에 대해 알아가요.',
+      textW2,
+      textSH1
+    );
+    text('귀부인들은 공주님의 스승처럼 고마우신 분들이죠.', textW2, textSH2);
+  } else if (16 === h) {
+    text('"마을 탐방하기"', textW, textBH);
+    textSize(20);
+    text('공주님은 사람들 몰래 마을을 탐방해요.', textW2, textSH1);
+    text('아리따운 외모 탓에 사람들은 쉽게 알아챘지만', textW2, textSH2);
+    text('귀여운 공주님을 위해 모른 척 해주죠.', textW2, textSH2 + 30);
+  } else if (17 === h) {
+    text('"꽃에 물 주기"', textW, textBH);
+    textSize(20);
+    text('공주님은 꽃을 좋아해요.', textW2, textSH1);
+    text('꽃을 보면 마음이 편안해진답니다.', textW2, textSH2);
   } else if (18 === h) {
     text('"부모님과 저녁식사하기"', textW, textBH);
     textSize(20);
     text('공주님은 부모님과도 사이가 아주 좋아요.', textW2, textSH1);
     text('사랑하는 부모님과 함께 저녁식사를 하는 것은', textW2, textSH2);
     text('매우 즐겁죠.', textW2, textSH2 + 30);
-  } else if (19 <= h && h <= 20) {
+  } else if (19 === h) {
     text('"운동으로 건강 유지하기"', textW, textBH);
     textSize(20);
     text('공주님은 건강한 신체를 유지하기 위해 운동을 해요.', textW2, textSH1);
     text('아리따운 몸매를 유지하기 위해', textW2, textSH2);
     text('스트레칭과 요가를 해봐요!', textW2, textSH2 + 30);
+  } else if (h === 20) {
+    text('"깨끗이 씻고 하루를 마무리"', textW - 30, textBH);
+    textSize(20);
+    text('공주님은 오늘 보람찬 하루를 보냈어요.', textW2, textSH1);
+    text('몸을 깨끗이 하고 일기를 쓰며 하루를 정리해봐요', textW2, textSH2);
   } else if (21 <= h || h <= 6) {
     text('"잠자기"', textW, textBH);
     textSize(20);
@@ -333,7 +358,7 @@ function showTime() {
   translate(clockCW, clockCH);
   rotate(radians(sDegree));
   stroke('#ffffff');
-  image(sHand, 0, -125, 40, 250);
+  image(sHand, 0, -135, 40, 270);
   pop();
   // 분침
   push();
@@ -367,26 +392,4 @@ function evening() {
 }
 function night() {
   fill('#442e82ff');
-}
-
-// 출처
-// https://www.youtube.com/watch?v=rSp5iSTXwAY&list=PL5BF31moSKc7vutVzQe_GRRcayM7_2aZA
-function nPointedStar(x, y, n, outerRadius, innerRadius, rotation) {
-  push();
-  let theta = TAU / n;
-  beginShape();
-
-  for (let i = 0; i < n; i++) {
-    vertex(
-      x + cos(i * theta + rotation) * outerRadius,
-      y + sin(i * theta + rotation) * outerRadius
-    );
-    vertex(
-      x + cos((i + 0.5) * theta + rotation) * innerRadius,
-      y + sin((i + 0.5) * theta + rotation) * innerRadius
-    );
-  }
-
-  endShape(CLOSE);
-  pop();
 }
