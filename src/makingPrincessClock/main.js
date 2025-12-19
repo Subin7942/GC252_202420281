@@ -109,7 +109,7 @@ function schedule() {
   let m = minute();
   let h = hour();
   let textW = width / 2 + 200;
-  let textW2 = width / 2 + 210;
+  let textW2 = width / 2 + 200;
   let timeTextH = height / 2 - 180;
   let textMH = height / 2 + 10;
   let textBH = height / 2 + 110;
