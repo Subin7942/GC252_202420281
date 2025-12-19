@@ -212,7 +212,7 @@ function schedule() {
     text('아리따운 몸매를 유지하기 위해', textW2, textSH2);
     text('스트레칭과 요가를 해봐요!', textW2, textSH2 + 30);
   } else if (h === 20) {
-    text('"깨끗이 씻고 하루를 마무리"', textW - 30, textBH);
+    text('"하루를 마무리하기"', textW - 30, textBH);
     textSize(20);
     text('공주님은 오늘 보람찬 하루를 보냈어요.', textW2, textSH1);
     text('몸을 깨끗이 하고 일기를 쓰며 하루를 정리해봐요', textW2, textSH2);
