@@ -287,19 +287,6 @@ function clockNumber() {
   pop();
 }
 
-function mouseCursor() {
-  push();
-  if (mouseIsPressed) {
-    noFill();
-    stroke('#ffffff');
-  } else {
-    fill('#ffffff');
-    noStroke();
-  }
-  nPointedStar(mouseX, mouseY, 5, 20, 10, 0);
-  pop();
-}
-
 function clock() {
   let s = second();
   let h = hour();
