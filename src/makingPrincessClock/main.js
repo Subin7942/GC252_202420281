@@ -157,6 +157,7 @@ function schedule() {
     textSize(20);
     text('공주님은 손재주도 좋아요.', textW2, textSH1);
     text('아리따운 자수로 감각과 심미안을 길러봐요.', textW2, textSH2);
+    text('공주님의 작품은 모두가 좋아해요.', textW2, textSH2 + 30);
   } else if (11 === h) {
     text('"예쁜 목소리로 노래하기"', textW, textBH);
     textSize(20);
