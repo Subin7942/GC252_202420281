@@ -128,7 +128,11 @@ function schedule() {
   textFont(fontB);
   textSize(45);
   fill('#ea7eb9ff');
-  text('시간이 벌써 ' + (h % 12) + '시 ' + m + '분!!', textW, timeTextH);
+  if (m === 0) {
+    text('시간이 벌써 ' + (h % 12) + '시!!', textW, timeTextH);
+  } else {
+    text('시간이 벌써 ' + (h % 12) + '시 ' + m + '분!!', textW, timeTextH);
+  }
   textSize(32);
   text('공주님이 지금 해야할 일은?', textW, textMH);
   textSize(45);
